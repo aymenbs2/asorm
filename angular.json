@@ -120,6 +120,76 @@
           }
         }
       }
+    },
+    "ASORM": {
+      "projectType": "library",
+      "root": "projects/asorm",
+      "sourceRoot": "projects/asorm/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/asorm/tsconfig.lib.json",
+            "project": "projects/asorm/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/asorm/src/test.ts",
+            "tsConfig": "projects/asorm/tsconfig.spec.json",
+            "karmaConfig": "projects/asorm/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/asorm/tsconfig.lib.json",
+              "projects/asorm/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "asorm": {
+      "projectType": "library",
+      "root": "projects/asorm",
+      "sourceRoot": "projects/asorm/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/asorm/tsconfig.lib.json",
+            "project": "projects/asorm/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/asorm/src/test.ts",
+            "tsConfig": "projects/asorm/tsconfig.spec.json",
+            "karmaConfig": "projects/asorm/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/asorm/tsconfig.lib.json",
+              "projects/asorm/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
   "defaultProject": "AsORM"
 }
