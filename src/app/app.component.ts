@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {ExampleLibDoa} from './ExampleLibDoa';
 import {User} from './User';
 
+const global = window;
+
 @Component({
   selector: 'app-root',
   template: '<h1> AsORM</h1>',
@@ -22,10 +24,10 @@ export class AppComponent {
 
   async addOnEnter() {
     const user = new User();
-    user.name = 'khalil';
-    user._id = (new Date().getTime()) + '';
-    user.note = 'test';
-    await this.exampleLibDoa.put(user);
-    console.log(await this.exampleLibDoa.get());
+    // user.name = 'khalil';
+    // user._id = (new Date().getTime()) + '';
+    // user.note = 'test';
+    // await this.exampleLibDoa.put(user);
+    console.log(await this.exampleLibDoa.where({note:'test'}).limit(3).orderBy([{_id: 'asc'}]).apply());
   }
 }

@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14"
+    "@angular/core": "^8.2.14",
+    "pouchdb": "^7.1.1",
+    "pouchdb-find": "^7.1.1"
   }
 }

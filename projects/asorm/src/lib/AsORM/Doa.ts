@@ -6,13 +6,15 @@ import {IDoa} from './base/IDoa';
 export function Doa(Class, name?: string) {
   return <T extends new(...args: any[]) => {}>(constructor: T) => {
     return class extends constructor implements IDoa {
+
       name: string;
       database: any;
+      query: any = {};
 
       constructor(...args) {
         super(arguments);
         this.name = name ? name : (new Class()).constructor.name;
-        console.log(DBManager.getInstance().getAll())
+        console.log(DBManager.getInstance().getAll());
         this.database = DBManager.getInstance().getDBByName(this.name).db;
       }
 
@@ -47,21 +49,29 @@ export function Doa(Class, name?: string) {
       delete(item): any {
       }
 
-      async where(query, fields?, sort?) {
-        const queryBuilded = {selector: query, fields: undefined,
-          sort: undefined
-        };
-        if (fields) {
-          queryBuilded.fields = fields;
-        }
-        if (sort) {
-          queryBuilded.sort = sort;
-        }
-        let res = await this.database.find(queryBuilded);
-        res = res.docs;
-        return res;
+       where(clause) {
+        this.query.selector = clause;
+        return this;
       }
 
+      async apply(...args): Promise<any> {
+        return await this.database.find(this.query);
+      }
+
+      orderBy(clause): any {
+        this.query.sort = clause;
+        return this;
+      }
+
+      select(fields): any {
+        this.query.fields = fields;
+        return this;
+      }
+
+      limit(limit: number): any {
+        this.query.limit = limit;
+        return this;
+      }
     };
   };
 

@@ -5,5 +5,14 @@ export interface IDoa {
 
   delete(...args): any;
 
+  select(...args): any;
+
   where(...args): any;
+
+  orderBy(...args): any;
+
+  limit(...args): any;
+
+  apply(...args): any;
+
 }

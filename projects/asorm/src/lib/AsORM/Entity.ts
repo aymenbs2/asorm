@@ -1,6 +1,7 @@
 import {DBManager} from './DBManager';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
+
 PouchDB.plugin(PouchdbFind);
 
 export function Entity(name?: string) {
