@@ -6,4 +6,5 @@ export class User {
   _id: any;
   note: string;
   name: string;
+  shapes = [];
 }

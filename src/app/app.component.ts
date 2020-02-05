@@ -23,11 +23,12 @@ export class AppComponent {
   }
 
   async addOnEnter() {
-    const user = new User();
-    // user.name = 'khalil';
+    // const user = new User();
+    // user.name = 'mejdi';
     // user._id = (new Date().getTime()) + '';
     // user.note = 'test';
+    // user.shapes = ['123', '1412', 'hdhdhdh'];
     // await this.exampleLibDoa.put(user);
-    console.log(await this.exampleLibDoa.where({note:'test'}).limit(3).orderBy([{_id: 'asc'}]).apply());
+    console.log(await this.exampleLibDoa.where({shapes: '123'}).limit(3).orderBy([{_id: 'asc'}]).apply());
   }
 }
