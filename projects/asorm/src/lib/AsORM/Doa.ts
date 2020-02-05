@@ -1,15 +1,21 @@
-import {DBManager} from './DBManager';
-import {ThrowStmt} from '@angular/compiler';
-import {IDoa} from './base/IDoa';
+import { DBManager } from './DBManager';
+import { ThrowStmt } from '@angular/compiler';
+import { IDoa } from './base/IDoa';
 
 
 export function Doa(Class, name?: string) {
-  return <T extends new(...args: any[]) => {}>(constructor: T) => {
+  return <T extends new (...args: any[]) => {}>(constructor: T) => {
     return class extends constructor implements IDoa {
+      like(...args: any[]) {
+        throw new Error("Method not implemented.");
+      }
+      match(...args: any[]) {
+        throw new Error("Method not implemented.");
+      }
 
       name: string;
       database: any;
-      query: any = {};
+      query: any = { selector: {} };
 
       constructor(...args) {
         super(arguments);
@@ -37,7 +43,7 @@ export function Doa(Class, name?: string) {
       async put(dataC): Promise<any> {
         try {
           if ((new Class()).constructor.name !== dataC.constructor.name) {
-            throw  new Error('this data not instance of ' + (new Class()).constructor.name);
+            throw new Error('this data not instance of ' + (new Class()).constructor.name);
           }
           const promise = await this.database.put(dataC);
           return (promise);
@@ -49,12 +55,14 @@ export function Doa(Class, name?: string) {
       delete(item): any {
       }
 
-       where(clause) {
-        this.query.selector = clause;
+      where(field: any, operator: any, value: any) {
+        this.query.selector = this.buildClause(field, operator, value);
+
         return this;
       }
 
       async apply(...args): Promise<any> {
+        console.log("query is ", this.query)
         return await this.database.find(this.query);
       }
 
@@ -71,6 +79,70 @@ export function Doa(Class, name?: string) {
       limit(limit: number): any {
         this.query.limit = limit;
         return this;
+      }
+
+
+      buildClause(field: any, operator, value) {
+        let result = {}
+        result[field] = this.getValueWithOperatot(operator, value);
+        console.log(result)
+        return JSON.parse(JSON.stringify(result));
+      }
+      getValueWithOperatot(operator: any, value: any): any {
+        switch (operator) {
+          case '<': {
+            return { $lt: value }
+
+          }
+          case '>': {
+            return { $gt: value }
+
+          }
+          case '<=': {
+            return { $lte: value }
+
+          }
+          case '>=': {
+            return { $gte: value }
+
+          }
+          case '=': {
+            return {
+              $eq: value
+            }
+
+          }
+          case '!=': {
+            return {
+              $ne: value
+            }
+
+          }
+          case 'in': {
+            return {
+              $in: value
+            }
+
+          }
+          case 'like': {
+            return {
+              $regex: value
+            }
+
+          }
+          case 'match': {
+            return {
+              $elemMatch: value
+            }
+
+          }
+          default: {
+            return {
+              $eq: value
+            }
+          }
+        }
+
       }
     };
   };

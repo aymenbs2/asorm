@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
-import {ExampleLibDoa} from './ExampleLibDoa';
-import {User} from './User';
+import { Component } from '@angular/core';
+import { ExampleLibDoa } from './ExampleLibDoa';
+import { User } from './User';
 
 const global = window;
 
@@ -27,8 +27,8 @@ export class AppComponent {
     // user.name = 'mejdi';
     // user._id = (new Date().getTime()) + '';
     // user.note = 'test';
-    // user.shapes = ['123', '1412', 'hdhdhdh'];
+    // user.shapes = ['55555', '1412', 'hdhdhdh'];
     // await this.exampleLibDoa.put(user);
-    console.log(await this.exampleLibDoa.where({shapes: '123'}).limit(3).orderBy([{_id: 'asc'}]).apply());
+    console.log(await this.exampleLibDoa.where("name", "like", "me").apply());
   }
 }
