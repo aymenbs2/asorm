@@ -1,5 +1,5 @@
 export interface IDoa {
-  get(...args): any;
+   get(...args): any;
 
   put(...args): any;
 

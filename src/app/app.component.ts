@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { ExampleLibDoa } from './ExampleLibDoa';
-import { User } from './User';
+import {Component} from '@angular/core';
+import {ExampleLibDoa} from './ExampleLibDoa';
+import {User} from './User';
 
 const global = window;
 
@@ -10,16 +10,26 @@ const global = window;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  static instance: AppComponent;
   title = 'AsORM';
   exampleLibDoa;
 
   constructor() {
-    this.exampleLibDoa = new ExampleLibDoa();
+    this.createDoa();
     document.addEventListener('click', () => {
       console.log('clikc');
       this.addOnEnter();
     });
+    AppComponent.instance = this;
+  }
 
+
+  static getInstance() {
+    return this.instance;
+  }
+
+  createDoa() {
+    this.exampleLibDoa = new ExampleLibDoa();
   }
 
   async addOnEnter() {
@@ -29,6 +39,7 @@ export class AppComponent {
     // user.note = 'test';
     // user.shapes = ['55555', '1412', 'hdhdhdh'];
     // await this.exampleLibDoa.put(user);
-    console.log(await this.exampleLibDoa.where("name", "like", "me").apply());
+    let result = await this.exampleLibDoa.where('name', 'mejdi', 'like').apply();
+    console.log(JSON.stringify(result.docs));
   }
 }
