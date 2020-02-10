@@ -1,6 +1,6 @@
-import {DBManager} from './DBManager';
-import {ThrowStmt} from '@angular/compiler';
-import {IDoa} from './base/IDoa';
+import { DBManager } from './DBManager';
+import { ThrowStmt } from '@angular/compiler';
+import { IDoa } from './base/IDoa';
 
 
 export function Doa(Class, name?: string) {
@@ -9,7 +9,7 @@ export function Doa(Class, name?: string) {
 
       name: string;
       database: any;
-      query: any = {selector: {}};
+      query: any = { selector: {} };
 
       constructor(...args) {
         super(arguments);
@@ -18,7 +18,7 @@ export function Doa(Class, name?: string) {
         this.database = DBManager.getInstance().getDBByName(this.name).db;
       }
 
-       get(): Promise<any> {
+      get(): Promise<any> {
         return new Promise(async resolve => {
           const docs = await this.database.allDocs({
             include_docs: true,
@@ -46,12 +46,15 @@ export function Doa(Class, name?: string) {
         }
       }
 
-      delete(item): any {
+      async delete(doc): Promise<any> {
+        return await this.database.remove(doc)
       }
 
+      async update(doc): Promise<any> {
+        return await this.database.put(doc)
+      }
       where(field: any, operator: any, value: any) {
         this.query.selector = this.buildWhereClause(field, operator, value);
-
         return this;
       }
 
@@ -83,7 +86,7 @@ export function Doa(Class, name?: string) {
 
       buildWhereClause(field: any, value, operator?) {
         const result = {};
-        result[field] = (operator) ? this.getValueWithOperator(operator, value) : {$eq: value};
+        result[field] = (operator) ? this.getValueWithOperator(operator, value) : { $eq: value };
         return JSON.parse(JSON.stringify(result));
       }
 
@@ -91,25 +94,25 @@ export function Doa(Class, name?: string) {
 
         switch (operator) {
           case '<':
-            return {$lt: value};
+            return { $lt: value };
           case '>':
-            return {$gt: value};
+            return { $gt: value };
           case '<=':
-            return {$lte: value};
+            return { $lte: value };
           case '>=':
-            return {$gte: value};
+            return { $gte: value };
           case '=':
-            return {$eq: value};
+            return { $eq: value };
           case '!=':
-            return {$ne: value};
+            return { $ne: value };
           case 'in':
-            return {$in: value};
+            return { $in: value };
           case 'like':
-            return {$regex: value};
+            return { $regex: value };
           case 'match':
-            return {$elemMatch: value};
+            return { $elemMatch: value };
           default: {
-            throw  new Error('Operator not found');
+            throw new Error('Operator not found');
           }
         }
 
