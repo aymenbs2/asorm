@@ -34,13 +34,12 @@ export class AppComponent {
 
   async addOnEnter() {
     const user = new User();
-    user.name = 'aymen';
-    user._id = (new Date().getTime()) + '';
+    user.name = 'aymen upted npow';
     user.note = 'test';
     user.shapes = ['55555', '1412', 'hdhdhdh'];
-    await this.exampleLibDoa.put(user);
-    const deleteRes = await this.exampleLibDoa.deleteWhere('name', 'aymen', '=');
-    const result = await this.exampleLibDoa.get();
-    console.log('res', result);
+    user._id = '1581323621402';
+    const rest = await this.exampleLibDoa.updateWhere('_id', user._id, '');
+
+    //const result = await this.exampleLibDoa.get();
   }
 }

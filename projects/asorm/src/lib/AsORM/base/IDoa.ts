@@ -18,4 +18,6 @@ export interface IDoa {
   sync(...args): any;
 
   deleteWhere(...args): any;
+
+  updateWhere(...args): any;
 }

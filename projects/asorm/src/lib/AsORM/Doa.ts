@@ -3,7 +3,6 @@ import {ThrowStmt} from '@angular/compiler';
 import {IDoa} from './base/IDoa';
 import PouchDB from 'pouchdb';
 
-
 export function Doa(Class, name?: string) {
   return <T extends new (...args: any[]) => {}>(constructor: T) => {
     return class extends constructor implements IDoa {
@@ -43,9 +42,7 @@ export function Doa(Class, name?: string) {
 
       async put(dataC): Promise<any> {
         try {
-          if ((new Class()).constructor.name !== dataC.constructor.name) {
-            throw new Error('this data not instance of ' + (new Class()).constructor.name);
-          }
+
           const promise = await this.database.put(dataC);
           return (promise);
         } catch (e) {
@@ -57,8 +54,14 @@ export function Doa(Class, name?: string) {
         return await this.database.remove(doc);
       }
 
-      async update(doc): Promise<any> {
-        return await this.database.put(doc);
+      async updateWhere(field, value, operator?): Promise<any> {
+        const toUpdate = await this.where(field, value, '=').apply();
+        const result = [];
+        for (const item of toUpdate.docs) {
+          item[field] = value;
+          result.push(await this.database.put(item));
+        }
+        return  result;
       }
 
       where(field: any, value: any, operator?: any) {
@@ -86,11 +89,10 @@ export function Doa(Class, name?: string) {
       }
 
       async deleteWhere(field, value, operator?): Promise<any> {
-        const toDeleteList = await this.where(field, value, operator).apply() ;
-        let  result = [];
-        console.log('to delete', toDeleteList);
+        const toDeleteList = await this.where(field, value, operator).apply();
+        const result = [];
         for (const item of toDeleteList.docs) {
-          result.push(await  this.delete(item));
+          result.push(await this.delete(item));
         }
         return result;
       }

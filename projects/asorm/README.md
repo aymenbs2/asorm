@@ -2,9 +2,14 @@
 The AS-ORM  provides a beautiful, simple ActiveRecord implementation for working with your pouchdb database.
  Each database table has a corresponding "Entity" which is used to interact with that table with its DOA.
  
- #Installation
+
+ # Installation
+
     ``` npm i asorm ```
- #Basic Usage
+    
+    
+ # Basic Usage
+
  To get started, create an ASORM Entity
  
     ```
@@ -22,10 +27,10 @@ The AS-ORM  provides a beautiful, simple ActiveRecord implementation for working
     
     }
      ```
-   #  Put, Delete
+   #  Put, Delete , UpdateWhere , Where
    To create a new record in the database from an Entity, simply create a new entity instance and call the put method.
   
-   ##put
+   ## put
     
         put create a new item if not exist else update it
     
@@ -36,7 +41,13 @@ The AS-ORM  provides a beautiful, simple ActiveRecord implementation for working
         const doa = new  UserDOA();
         doa.put(user)
      ```
-   ##delete
+   ## UpdateWhere
+   
+    ```
+      const rest = await doa.updateWhere('_id', user._id, '');
+
+     ```
+   ## delete
         
      ```
         const deleteRes = await doa.delete(user);
@@ -48,9 +59,11 @@ The AS-ORM  provides a beautiful, simple ActiveRecord implementation for working
      ```
   return the an array has the responses
   
-###Where 
+### Where 
 Take 3 params the field , value and the logic operator in this example we will get the users that name equal to "asorm"
     
     ```
         const users = await doa.where('name', 'asrom', '=');
     ```
+### where operators
+//todo
