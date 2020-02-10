@@ -49,6 +49,7 @@ The ASORM  provides a beautiful, simple ActiveRecord implementation for working 
   
 ###Where 
 Take 3 params the field , value and the logic operator in this example we will get the users that name equal to "asorm"
+    
     ```
         const users = await doa.where('name', 'asrom', '=');
     ```
