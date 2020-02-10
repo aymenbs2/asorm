@@ -15,5 +15,7 @@ export interface IDoa {
 
   apply(...args): any;
 
-  sync(...args);
+  sync(...args): any;
+
+  deleteWhere(...args): any;
 }

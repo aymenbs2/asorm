@@ -61,8 +61,8 @@ export function Doa(Class, name?: string) {
         return await this.database.put(doc);
       }
 
-      where(field: any, operator: any, value: any) {
-        this.query.selector = this.buildWhereClause(field, operator, value);
+      where(field: any, value: any, operator?: any) {
+        this.query.selector = this.buildWhereClause(field, value, operator);
         return this;
       }
 
@@ -83,6 +83,16 @@ export function Doa(Class, name?: string) {
       limit(limit: number): any {
         this.query.limit = limit;
         return this;
+      }
+
+      async deleteWhere(field, value, operator?): Promise<any> {
+        const toDeleteList = await this.where(field, value, operator).apply() ;
+        let  result = [];
+        console.log('to delete', toDeleteList);
+        for (const item of toDeleteList.docs) {
+          result.push(await  this.delete(item));
+        }
+        return result;
       }
 
       buildOrderByClause(field, order?) {
