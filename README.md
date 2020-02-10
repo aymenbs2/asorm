@@ -1,8 +1,9 @@
-# ASORM
-
-The ASORM  provides a beautiful, simple ActiveRecord implementation for working with your pouchdb database.
+# AS-ORM
+The AS-ORM  provides a beautiful, simple ActiveRecord implementation for working with your pouchdb database.
  Each database table has a corresponding "Entity" which is used to interact with that table with its DOA.
  
+ #Installation
+    ``` npm i asorm ```
  #Basic Usage
  To get started, create an ASORM Entity
  
@@ -49,6 +50,7 @@ The ASORM  provides a beautiful, simple ActiveRecord implementation for working 
   
 ###Where 
 Take 3 params the field , value and the logic operator in this example we will get the users that name equal to "asorm"
+    
     ```
         const users = await doa.where('name', 'asrom', '=');
     ```
