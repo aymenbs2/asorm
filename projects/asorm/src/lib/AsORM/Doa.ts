@@ -1,20 +1,22 @@
-import { DBManager } from './DBManager';
-import { ThrowStmt } from '@angular/compiler';
-import { IDoa } from './base/IDoa';
+import {DBManager} from './DBManager';
+import {ThrowStmt} from '@angular/compiler';
+import {IDoa} from './base/IDoa';
+import PouchDB from 'pouchdb';
 
 
 export function Doa(Class, name?: string) {
   return <T extends new (...args: any[]) => {}>(constructor: T) => {
     return class extends constructor implements IDoa {
 
+
       name: string;
       database: any;
-      query: any = { selector: {} };
+      query: any = {selector: {}};
+      sync: any;
 
       constructor(...args) {
         super(arguments);
         this.name = name ? name : (new Class()).constructor.name;
-        console.log(DBManager.getInstance().getAll());
         this.database = DBManager.getInstance().getDBByName(this.name).db;
       }
 
@@ -34,6 +36,11 @@ export function Doa(Class, name?: string) {
 
       }
 
+      syncWith(url) {
+        this.sync = this.database.sync(new PouchDB(url));
+        return this.sync;
+      }
+
       async put(dataC): Promise<any> {
         try {
           if ((new Class()).constructor.name !== dataC.constructor.name) {
@@ -47,19 +54,19 @@ export function Doa(Class, name?: string) {
       }
 
       async delete(doc): Promise<any> {
-        return await this.database.remove(doc)
+        return await this.database.remove(doc);
       }
 
       async update(doc): Promise<any> {
-        return await this.database.put(doc)
+        return await this.database.put(doc);
       }
+
       where(field: any, operator: any, value: any) {
         this.query.selector = this.buildWhereClause(field, operator, value);
         return this;
       }
 
       async apply(...args): Promise<any> {
-        console.log('query is ', this.query);
         return await this.database.find(this.query);
       }
 
@@ -86,7 +93,7 @@ export function Doa(Class, name?: string) {
 
       buildWhereClause(field: any, value, operator?) {
         const result = {};
-        result[field] = (operator) ? this.getValueWithOperator(operator, value) : { $eq: value };
+        result[field] = (operator) ? this.getValueWithOperator(operator, value) : {$eq: value};
         return JSON.parse(JSON.stringify(result));
       }
 
@@ -94,23 +101,23 @@ export function Doa(Class, name?: string) {
 
         switch (operator) {
           case '<':
-            return { $lt: value };
+            return {$lt: value};
           case '>':
-            return { $gt: value };
+            return {$gt: value};
           case '<=':
-            return { $lte: value };
+            return {$lte: value};
           case '>=':
-            return { $gte: value };
+            return {$gte: value};
           case '=':
-            return { $eq: value };
+            return {$eq: value};
           case '!=':
-            return { $ne: value };
+            return {$ne: value};
           case 'in':
-            return { $in: value };
+            return {$in: value};
           case 'like':
-            return { $regex: value };
+            return {$regex: value};
           case 'match':
-            return { $elemMatch: value };
+            return {$elemMatch: value};
           default: {
             throw new Error('Operator not found');
           }

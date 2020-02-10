@@ -15,4 +15,5 @@ export interface IDoa {
 
   apply(...args): any;
 
+  sync(...args);
 }
