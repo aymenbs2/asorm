@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { ExampleLibDoa } from './ExampleLibDoa';
-import { User } from './User';
+import {Component} from '@angular/core';
+import {ExampleLibDoa} from './ExampleLibDoa';
+import {User} from './User';
 
 const global = window;
 
@@ -33,19 +33,21 @@ export class AppComponent {
   }
 
   async addOnEnter() {
-    const user = new User();
-    user.name = 'aymen';
-    user._id = (new Date().getTime()) + '';
-    user.note = 'test';
-    user.shapes = ['55555', '1412', 'hdhdhdh'];
-    await this.exampleLibDoa.put(user);
-    let result = await this.exampleLibDoa.where('name', 'aymen', 'like').apply();
-    for (let res of result.docs) {
-      res.name = "update"
-      let supp = await this.exampleLibDoa.update(res)
-      console.log(supp, "supp is");
-    }
-    result = await this.exampleLibDoa.where('name', 'upda', 'like').apply();
-    console.log("after update", JSON.stringify(result))
+    // const user = new User();
+    // user.name = 'aymen';
+    // user._id = (new Date().getTime()) + '';
+    // user.note = 'test';
+    // user.shapes = ['55555', '1412', 'hdhdhdh'];
+    // await this.exampleLibDoa.put(user);
+    // let result = await this.exampleLibDoa.where('name', 'aymen', 'like').apply();
+    // for (let res of result.docs) {
+    //   res.name = "update"
+    //   let supp = await this.exampleLibDoa.update(res)
+    //   console.log(supp, "supp is");
+    // }
+    const result = this.exampleLibDoa.syncWith('http://localhost:5984/user').on('change', changes => {
+      console.log('changes', changes);
+    });
+
   }
 }
