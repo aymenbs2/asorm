@@ -22,8 +22,8 @@ The AS-ORM  provides a beautiful, simple ActiveRecord implementation for working
    Once the entity is defined, now we must define its dao
    
     ```
-    @dao(User)
-    class Userdao {
+    @Dao(User)
+    class UserDao {
     
     }
      ```
