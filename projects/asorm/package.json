@@ -6,6 +6,13 @@
     "@angular/core": "^8.2.14",
     "pouchdb": "^7.1.1",
     "pouchdb-find": "^7.1.1"
-  }
+  },
+  "keywords": [
+    "pouchdb",
+    "database",
+    "ORM",
+    "AS-ORM",
+    "asorm"
+  ]
 
 }

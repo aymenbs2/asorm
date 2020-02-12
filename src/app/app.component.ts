@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
-import {ExampleLibDoa} from './ExampleLibDoa';
+import {ExampleLibDao} from './ExampleLibDao';
 import {User} from './User';
+import {Callback} from './callback';
 
 const global = window;
 
@@ -12,7 +13,7 @@ const global = window;
 export class AppComponent {
   static instance: AppComponent;
   title = 'AsORM';
-  exampleLibDoa;
+  exampleLibDoa: any;
 
   constructor() {
     this.createDoa();
@@ -29,17 +30,36 @@ export class AppComponent {
   }
 
   createDoa() {
-    this.exampleLibDoa = new ExampleLibDoa();
+    this.exampleLibDoa = new ExampleLibDao();
   }
 
   async addOnEnter() {
-    const user = new User();
-    user.name = 'aymen upted npow';
-    user.note = 'test';
-    user.shapes = ['55555', '1412', 'hdhdhdh'];
-    user._id = '1581323621402';
-    const rest = await this.exampleLibDoa.updateWhere('_id', user._id, '');
-
-    //const result = await this.exampleLibDoa.get();
+    // const user = new User();
+    // user.name = 'aymen upted npow';
+    // user.note = 'test';
+    // user.shapes = ['55555', '1412', 'hdhdhdh'];
+    // user._id = '1581323621402';
+     await this.exampleLibDoa.where('name', 'ay', 'like').deleteWhere('name', 'ay', 'like', {
+      onSuccess: (data) => {
+        console.log('suu', data);
+      },
+      onError: (e) => {
+        console.log(e);
+      }
+    });
+    // this.exampleLibDoa.get({
+    //   onPreExecute: () => {
+    //     console.log('on pre execute');
+    //   },
+    //   onSuccess: (result) => {
+    //     console.log(result);
+    //   },
+    //   onError: (e) => {
+    //     console.log(e);
+    //   },
+    //   onPostExecute: () => {
+    //     console.log('ddd');
+    //   }
+    // });
   }
 }
