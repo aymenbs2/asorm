@@ -1,9 +1,15 @@
-# ASORM
-
-The ASORM  provides a beautiful, simple ActiveRecord implementation for working with your pouchdb database.
- Each database table has a corresponding "Entity" which is used to interact with that table with its DOA.
+# AS-ORM
+The AS-ORM  provides a beautiful, simple ActiveRecord implementation for working with your pouchdb database.
+ Each database table has a corresponding "Entity" which is used to interact with that table with its dao.
  
- #Basic Usage
+
+ # Installation
+
+    ``` npm i asorm ```
+    
+    
+ # Basic Usage
+
  To get started, create an ASORM Entity
  
     ```
@@ -13,18 +19,18 @@ The ASORM  provides a beautiful, simple ActiveRecord implementation for working 
         name:string;
     }
     ```
-   Once the entity is defined, now we must define its DOA
+   Once the entity is defined, now we must define its dao
    
     ```
-    @DOA(User)
-    class UserDOA {
+    @Dao(User)
+    class UserDao {
     
     }
      ```
-   #  Put, Delete
+   #  Put, Delete , UpdateWhere , Where
    To create a new record in the database from an Entity, simply create a new entity instance and call the put method.
   
-   ##put
+   ## put
     
         put create a new item if not exist else update it
     
@@ -32,24 +38,32 @@ The ASORM  provides a beautiful, simple ActiveRecord implementation for working 
         const user = new User();
         user._id= "123";
         user.name = "asorm_user";
-        const doa = new  UserDOA();
-        doa.put(user)
+        const dao = new  Userdao();
+        dao.put(user)
      ```
-   ##delete
+   ## UpdateWhere
+   
+    ```
+      const rest = await dao.updateWhere('_id', user._id, '');
+
+     ```
+   ## delete
         
      ```
-        const deleteRes = await doa.delete(user);
+        const deleteRes = await dao.delete(user);
      ```
  or with where clause 
       
      ```
-      const deleteRes = await doa.deleteWhere('name', 'asmorm_user', '=');
+      const deleteRes = await dao.deleteWhere('name', 'asmorm_user', '=');
      ```
   return the an array has the responses
   
-###Where 
+### Where 
 Take 3 params the field , value and the logic operator in this example we will get the users that name equal to "asorm"
     
     ```
-        const users = await doa.where('name', 'asrom', '=');
+        const users = await dao.where('name', 'asrom', '=').apply();
     ```
+### where operators
+//todo

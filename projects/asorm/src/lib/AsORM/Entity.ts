@@ -1,4 +1,4 @@
-import {DBManager} from './DBManager';
+import {DbManager} from './db.manager';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
 
@@ -8,7 +8,7 @@ export function Entity(name?: string) {
   return <T extends new(...args: any[]) => {}>(constructor: T) => {
     const chosenName = name ? name : constructor.name;
     const db = new PouchDB(chosenName);
-    DBManager.getInstance().addDB({
+    DbManager.getInstance().addDB({
       name: chosenName,
       db
     });

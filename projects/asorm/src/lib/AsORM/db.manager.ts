@@ -1,9 +1,9 @@
-import {DBItemModel} from './DBItemModel';
+import {DbItemModel} from './db.item.model';
 
 // @dynamic
-export class DBManager {
-  private static instance: DBManager;
-  private dbs: Array<DBItemModel>;
+export class DbManager {
+  private static instance: DbManager;
+  private dbs: Array<DbItemModel>;
 
   constructor() {
     this.dbs = [];
@@ -11,12 +11,12 @@ export class DBManager {
 
   public static getInstance() {
     if (this.instance == null) {
-      this.instance = new DBManager();
+      this.instance = new DbManager();
     }
     return this.instance;
   }
 
-  public addDB(db: DBItemModel) {
+  public addDB(db: DbItemModel) {
     this.dbs.push(db);
   }
 
@@ -27,7 +27,7 @@ export class DBManager {
     });
   }
 
-  getDBByName(name: string): DBItemModel {
+  getDBByName(name: string): DbItemModel {
     return this.dbs.find(item => item.name === name);
   }
 

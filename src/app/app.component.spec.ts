@@ -1,10 +1,10 @@
 import {TestBed, async} from '@angular/core/testing';
 import {AppComponent} from './app.component';
-import {ExampleLibDoa} from './ExampleLibDoa';
+import {ExampleLibDao} from './ExampleLibDao';
 
 
 describe('AppComponent', () => {
-  const doa = new ExampleLibDoa();
+  const doa = new ExampleLibDao();
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
