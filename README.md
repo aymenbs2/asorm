@@ -27,7 +27,7 @@ The AS-ORM  provides a beautiful, simple ActiveRecord implementation for working
     
     }
      ```
-   #  Put, Delete , UpdateWhere , Where
+   #  Put, Delete, UpdateWhere, Where
    To create a new record in the database from an Entity, simply create a new entity instance and call the put method.
   
    ## put
@@ -57,10 +57,10 @@ The AS-ORM  provides a beautiful, simple ActiveRecord implementation for working
      ```
       const deleteRes = await dao.deleteWhere('name', 'asmorm_user', '=');
      ```
-  return the an array has the responses
+  return an array with responses
   
 ### Where 
-Take 3 params the field , value and the logic operator in this example we will get the users that name equal to "asorm"
+Take 3 params the field, value and the logic operator in this example we will get the users with name equal to "asorm"
     
     ```
         const users = await dao.where('name', 'asrom', '=').apply();
