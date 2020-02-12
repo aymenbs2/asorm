@@ -63,7 +63,7 @@ The AS-ORM  provides a beautiful, simple ActiveRecord implementation for working
 Take 3 params the field , value and the logic operator in this example we will get the users that name equal to "asorm"
     
     ```
-        const users = await dao.where('name', 'asrom', '=');
+        const users = await dao.where('name', 'asrom', '=').apply();
     ```
 ### where operators
 //todo
