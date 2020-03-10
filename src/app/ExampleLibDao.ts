@@ -4,7 +4,7 @@ import {Callback} from './callback';
 
 // @ts-ignore
 @Dao(User, 'aymen')
-export class ExampleLibDao  {
+export class ExampleLibDao {
 
 }
 
