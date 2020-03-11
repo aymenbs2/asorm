@@ -1,10 +1,21 @@
 {
   "name": "asorm",
-  "version": "1.1.0",
+  "version": "1.4.11",
   "peerDependencies": {
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14",
     "pouchdb": "^7.1.1",
     "pouchdb-find": "^7.1.1"
+  },
+  "keywords": [
+    "pouchdb",
+    "database",
+    "ORM",
+    "AS-ORM",
+    "asorm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aymenbs2/asorm.git"
   }
 }

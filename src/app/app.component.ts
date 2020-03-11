@@ -1,6 +1,13 @@
-import {Component} from '@angular/core';
-import {ExampleLibDoa} from './ExampleLibDoa';
+import {AfterContentInit, Component, OnInit} from '@angular/core';
+import {ExampleLibDao} from './ExampleLibDao';
 import {User} from './User';
+import {Callback} from './callback';
+import {AsormConfig, AttachmentTypes} from 'asorm';
+import {compileSourceFiles} from 'ng-packagr';
+import {error} from 'ng-packagr/lib/util/log';
+import {Md5Helper} from '../../projects/asorm/src/lib/asorm/helpers/md5.helper';
+import {PatientDao} from './PatientDao';
+import {PatientEntity} from './Patient';
 
 const global = window;
 
@@ -10,37 +17,78 @@ const global = window;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
   static instance: AppComponent;
   title = 'AsORM';
-  exampleLibDoa;
+  exampleLibDoa: any;
+  patientDoa: any;
+  config;
 
   constructor() {
+    this.config = new AsormConfig({url: 'http://localhost:5984/', dbName: 'astorm'});
+    this.config.synchronize().on('change', data => {
+      console.log('changes', data);
+    });
+    AppComponent.instance = this;
     this.createDoa();
     document.addEventListener('click', () => {
       console.log('clikc');
       this.addOnEnter();
     });
-    AppComponent.instance = this;
   }
-
 
   static getInstance() {
     return this.instance;
   }
 
   createDoa() {
-    this.exampleLibDoa = new ExampleLibDoa();
+    this.exampleLibDoa = new ExampleLibDao();
+    this.patientDoa = new PatientDao();
   }
 
   async addOnEnter() {
-    const user = new User();
-    user.name = 'aymen';
-    user._id = (new Date().getTime()) + '';
-    user.note = 'test';
-    user.shapes = ['55555', '1412', 'hdhdhdh'];
+    let user = new User();
+    const patient = new PatientEntity();
+    patient._id = new Date().getTime() + '';
+    patient.name = 'haithompa';
+    user._id = new Date().getTime() + '1' + '';
+    user.name = 'haithomsuer';
     await this.exampleLibDoa.put(user);
-    const deleteRes = await this.exampleLibDoa.deleteWhere('name', 'aymen', '=');
-    const result = await this.exampleLibDoa.get();
-    console.log('res', result);
+    await this.patientDoa.put(patient);
+
+    await this.patientDoa.where('name', 'haithompa', 'like').apply({
+      onSuccess: (data) => {
+        console.log(data);
+
+      },
+      onError: (e) => {
+
+      }
+    });
+    await this.exampleLibDoa.where('name', 'haith', 'like').apply({
+      onSuccess: (data) => {
+        console.log('user', data);
+      },
+      onError: (e) => {
+
+      }
+    });
+
+    // this.exampleLibDoa.get({
+    //   onSuccess: (data) => {
+    //     console.log('uses ', data);
+    //   }, onError: (e) => {
+    //     console.log(e);
+    //   }
+    // });
+    //     onSuccess: (re) => {
+    //       console.log(re);
+    //     },
+    //     onError: (error) => {
+    //       console.log(error);
+    //     }
+    //   })
+    // ;
+
   }
 }
