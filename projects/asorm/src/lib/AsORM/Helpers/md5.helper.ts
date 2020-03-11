@@ -1,4 +1,4 @@
-export class MD5Helper {
+export class Md5Helper {
 
 
   hexcase = 0;   /* hex output format. 0 - lowercase; 1 - uppercase        */

@@ -1,6 +1,6 @@
 {
   "name": "asorm",
-  "version": "1.4.10",
+  "version": "1.4.11",
   "peerDependencies": {
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14",
@@ -13,6 +13,9 @@
     "ORM",
     "AS-ORM",
     "asorm"
-  ]
-
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aymenbs2/asorm.git"
+  }
 }

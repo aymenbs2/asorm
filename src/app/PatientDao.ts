@@ -3,5 +3,7 @@ import {Dao} from '../../projects/asorm/src/lib/asorm/dao';
 
 @Dao(PatientEntity, 'patients')
 export class PatientDao {
-
+  constructor() {
+    console.log('i m doa');
+  }
 }

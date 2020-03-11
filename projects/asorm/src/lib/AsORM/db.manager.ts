@@ -1,24 +1,23 @@
 import {DbItemModel} from './base/db.item.model';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
+import {ConstantsHelper} from './helpers/constants.helper';
 
 PouchDB.plugin(PouchdbFind);
 
 // @dynamic
 export class DbManager {
-  private static instance: DbManager;
+  static instance: DbManager;
   private dbs: Array<DbItemModel>;
   private baseDb;
-  private database: any;
-  private masterSync: any;
-  private masterDatabaseName: string;
 
   constructor() {
     this.dbs = [];
   }
 
   public static getInstance() {
-    if (this.instance == null) {
+    console.clear();
+    if (this.instance === undefined) {
       this.instance = new DbManager();
     }
     return this.instance;
@@ -43,38 +42,32 @@ export class DbManager {
     return this.dbs;
   }
 
-   getMasterDatabaseName() {
-    if (this.masterDatabaseName === '' || this.masterDatabaseName == null || this.masterDatabaseName === undefined) {
-      this.masterDatabaseName = 'baseDBAsORM';
-    }
-    return this.masterDatabaseName;
-  }
-
-  setMasterDatabaseName(name) {
-    this.masterDatabaseName = name;
+  getMasterDatabaseName() {
+    return JSON.parse(window.localStorage.getItem(ConstantsHelper.CONFIG_KEY)).dbName;
   }
 
   getBaseDb() {
-    console.log(this.baseDb === undefined);
     if (this.baseDb == null || this.baseDb === undefined) {
       this.baseDb = this.createBaseDB();
     }
-
     return this.baseDb;
   }
-
   setBaseDB(value) {
     this.baseDb = value;
   }
 
-
   private createBaseDB() {
-    const chosenName = this.getMasterDatabaseName();
-    const db = new PouchDB(chosenName);
-    return {
-      name: chosenName,
-      db
-    };
+
+    let db: any;
+    if (this.getMasterDatabaseName() !== undefined) {
+      db = new PouchDB(this.getMasterDatabaseName());
+      return {
+        name: this.getMasterDatabaseName(),
+        db
+      };
+    }
+    return null;
   }
 }
+
 

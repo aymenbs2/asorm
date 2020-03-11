@@ -1,36 +1,30 @@
 import PouchDB from 'pouchdb';
 import {DbManager} from './db.manager';
+import {IDao} from './base/i.dao';
+import {ConstantsHelper} from './helpers/constants.helper';
+import {AsormConfigModel} from './base/asorm.config.model';
 
-export function AsormConfig(config) {
-  return <T extends new (...arg: any[]) => {}>(constructor: T) => {
-    return class extends constructor {
-      syncObject;
+export class AsormConfig {
+  private sync: any;
+  private url: string;
+  private dbName: string;
 
+  constructor(config: AsormConfigModel) {
+    this.url = config.url;
+    this.dbName = config.dbName;
+    window.localStorage.setItem(ConstantsHelper.CONFIG_KEY, JSON.stringify(config));
+  }
 
-      configure() {
-        this.setMasterDatabaseName();
-        this.sync();
-      }
+  synchronize() {
+    DbManager.getInstance().getBaseDb().database = DbManager.getInstance().getBaseDb().db;
+    if (DbManager.getInstance().getBaseDb().database) {
+      this.sync = DbManager.getInstance().getBaseDb().database.sync(new PouchDB(this.url
+        + '/' + this.dbName), {
+        live: true,
+        retry: true
+      });
+      return this.sync;
+    }
+  }
 
-      setMasterDatabaseName() {
-        console.log('i config');
-        if (config.masterDatabaseName) {
-          DbManager.getInstance().setMasterDatabaseName(config.masterDatabaseName);
-        }
-      }
-
-      sync() {
-        DbManager.getInstance().getBaseDb().database = DbManager.getInstance().getBaseDb().db;
-        if (DbManager.getInstance().getBaseDb().database) {
-          this.syncObject = DbManager.getInstance().getBaseDb().database.sync(new PouchDB(config.url
-            + '/' + DbManager.getInstance().getMasterDatabaseName()), {
-            live: true,
-            retry: true
-          });
-          return this.syncObject;
-        }
-      }
-
-    };
-  };
 }

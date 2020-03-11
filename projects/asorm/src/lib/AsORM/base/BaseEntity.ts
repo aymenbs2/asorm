@@ -1,6 +1,5 @@
 export class BaseEntity {
   constructor() {
-
   }
 
 }

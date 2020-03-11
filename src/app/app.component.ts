@@ -1,14 +1,13 @@
-import {Component} from '@angular/core';
+import {AfterContentInit, Component, OnInit} from '@angular/core';
 import {ExampleLibDao} from './ExampleLibDao';
 import {User} from './User';
 import {Callback} from './callback';
-import {AttachmentTypes} from 'asorm';
+import {AsormConfig, AttachmentTypes} from 'asorm';
 import {compileSourceFiles} from 'ng-packagr';
 import {error} from 'ng-packagr/lib/util/log';
-import {MD5Helper} from '../../projects/asorm/src/lib/asorm/helpers/MD5Helper';
+import {Md5Helper} from '../../projects/asorm/src/lib/asorm/helpers/md5.helper';
 import {PatientDao} from './PatientDao';
 import {PatientEntity} from './Patient';
-import {ConfigAsorm} from './Config';
 
 const global = window;
 
@@ -18,6 +17,7 @@ const global = window;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
   static instance: AppComponent;
   title = 'AsORM';
   exampleLibDoa: any;
@@ -25,30 +25,28 @@ export class AppComponent {
   config;
 
   constructor() {
+    this.config = new AsormConfig({url: 'http://localhost:5984/', dbName: 'astorm'});
+    this.config.synchronize().on('change', data => {
+      console.log('changes', data);
+    });
+    AppComponent.instance = this;
     this.createDoa();
     document.addEventListener('click', () => {
       console.log('clikc');
       this.addOnEnter();
     });
-    AppComponent.instance = this;
   }
-
 
   static getInstance() {
     return this.instance;
   }
 
   createDoa() {
-    this.config = new ConfigAsorm();
-
     this.exampleLibDoa = new ExampleLibDao();
     this.patientDoa = new PatientDao();
   }
 
   async addOnEnter() {
-    //this.exampleLibDoa.replicateFrom('http://localhost:5984/user').on('change', (changes) => {
-    //});
-    this.config.configure();
     let user = new User();
     const patient = new PatientEntity();
     patient._id = new Date().getTime() + '';
@@ -70,7 +68,6 @@ export class AppComponent {
     await this.exampleLibDoa.where('name', 'haith', 'like').apply({
       onSuccess: (data) => {
         console.log('user', data);
-
       },
       onError: (e) => {
 

@@ -1,4 +1,4 @@
-import {Entity} from 'asorm';
+import {AsormConfig, Entity} from 'asorm';
 import {BaseEntity} from 'asorm';
 
 @Entity('patients')

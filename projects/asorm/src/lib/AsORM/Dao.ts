@@ -1,10 +1,9 @@
 import {DbManager} from './db.manager';
-import {ThrowStmt} from '@angular/compiler';
 import {IDao} from './base/i.dao';
 import PouchDB from 'pouchdb';
 import {ICallback} from './base/i.callback';
-import {OperatorHelper} from './helpers/OperatorHelper';
 import {AttachementManager} from './attachment/attachement.manager';
+import {OperatorHelper} from './helpers/operator.helper';
 
 export function Dao(Class, name?: string) {
 
@@ -25,11 +24,12 @@ export function Dao(Class, name?: string) {
       constructor(...args) {
         super(arguments);
         this.tableName = name ? name : (new Class()).constructor.name;
-        this.isFromBase = (Object.getPrototypeOf((new Class()).constructor ) + '').includes('BaseEntity');
+        this.isFromBase = (Object.getPrototypeOf((new Class()).constructor) + '').includes('BaseEntity');
         this.database = this.isFromBase ? DbManager.getInstance().getBaseDb().db : DbManager.getInstance().getDBByName(this.tableName).db;
       }
 
       async get(callback?: ICallback): Promise<any> {
+        let where: any;
         if (!this.isFromBase) {
           if (!callback) {
             return this.getDocsInPromise();
@@ -43,11 +43,11 @@ export function Dao(Class, name?: string) {
           }
           return;
         }
-        const where = this.where('table', this.tableName, '=');
-        if (!callback) {
-          return where.apply();
-        } else {
+        where = this.where('table', this.tableName, '=');
+        if (callback) {
           where.apply(callback);
+        } else {
+          return where.apply();
         }
       }
 
