@@ -9,4 +9,5 @@ export class User extends BaseEntity {
   note: string;
   name: string;
   shapes = [];
+  _attachments:any;
 }

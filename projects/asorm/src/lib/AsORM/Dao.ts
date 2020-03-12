@@ -26,6 +26,7 @@ export function Dao(Class, name?: string) {
         this.tableName = name ? name : (new Class()).constructor.name;
         this.isFromBase = (Object.getPrototypeOf((new Class()).constructor) + '').includes('BaseEntity');
         this.database = this.isFromBase ? DbManager.getInstance().getBaseDb().db : DbManager.getInstance().getDBByName(this.tableName).db;
+
       }
 
       async get(callback?: ICallback): Promise<any> {
@@ -114,6 +115,10 @@ export function Dao(Class, name?: string) {
           retry: true
         });
         return this.replication;
+      }
+
+      getAttachementManager() {
+        return new AttachementManager(this.database);
       }
 
       async put(data, callback?): Promise<any> {

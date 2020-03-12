@@ -16,7 +16,6 @@ export class DbManager {
   }
 
   public static getInstance() {
-    console.clear();
     if (this.instance === undefined) {
       this.instance = new DbManager();
     }
