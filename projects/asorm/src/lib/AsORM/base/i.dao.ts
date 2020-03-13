@@ -26,5 +26,6 @@ export abstract class IDao {
 
   abstract set(...args): any;
 
+  abstract orWhere(...args): any;
   abstract getAttachementManager(...args): any;
 }

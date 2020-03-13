@@ -337,6 +337,11 @@ export function Dao(Class, name?: string) {
         return JSON.parse(JSON.stringify(result));
       }
 
+      orWhere(field: any, value, operator?): any {
+        this.query.selector = OperatorHelper.getEqualOperator([this.query.selector, this.buildWhereClause(field, value, operator)]);
+        return this;
+      }
+
       async deleteWithCallBack(doc: any, callback: ICallback) {
         if (callback.onPreExecute) {
           callback.onPreExecute();
@@ -350,6 +355,7 @@ export function Dao(Class, name?: string) {
           callback.onPostExecute();
         }
       }
+
     };
   };
 

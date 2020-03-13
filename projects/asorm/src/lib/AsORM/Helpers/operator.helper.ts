@@ -24,11 +24,15 @@ export class OperatorHelper {
         throw new Error('Operator not found');
       }
     }
-
-
   }
 
   public static getEqualOperator(value) {
     return {$eq: value};
+  }
+
+  public static buildOrOperation(value) {
+    return {
+      $or: value
+    };
   }
 }
