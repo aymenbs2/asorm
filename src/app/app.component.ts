@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
-import {ExampleLibDao} from '../app/ExampleLibDao';
-import {User} from './User';
-import {AttachmentTypes} from '../../projects/asorm/src/lib/asorm/attachment/types';
-import {saveAs} from 'file-saver';
-import {config} from 'rxjs';
-import {AsormConfig} from 'asorm';
+import { Component } from '@angular/core';
+import { ExampleLibDao } from '../app/ExampleLibDao';
+import { User } from './User';
+import { AttachmentTypes } from '../../projects/asorm/src/lib/asorm/attachment/types';
+import { saveAs } from 'file-saver';
+import { config } from 'rxjs';
+import { AsormConfig } from 'asorm';
 
 const global = window;
 
@@ -24,7 +24,7 @@ export class AppComponent {
 
   constructor() {
 
-    const cn = new AsormConfig({url: 'http://couchdb.sfax.cover3d.com/', dbName: 'cover3ttest', username: 'admin', password: 'password'});
+    const cn = new AsormConfig({ url: 'http://localhost:5984', dbName: 'covttest', username: 'admin', password: 'password' });
     cn.synchronize().on('change', (data) => {
       console.log(data);
       console.log(data.direction);
@@ -66,7 +66,7 @@ export class AppComponent {
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
     }
-    return new File([u8arr], filename, {type: mime});
+    return new File([u8arr], filename, { type: mime });
   }
 
 }

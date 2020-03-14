@@ -1,20 +1,18 @@
-import {DbManager} from './db.manager';
-import {IDao} from './base/i.dao';
+import { DbManager } from './db.manager';
+import { IDao } from './base/i.dao';
 import PouchDB from 'pouchdb';
-import {ICallback} from './base/i.callback';
-import {AttachementManager} from './attachment/attachement.manager';
-import {OperatorHelper} from './helpers/operator.helper';
+import { ICallback } from './base/i.callback';
+import { AttachementManager } from './attachment/attachement.manager';
+import { OperatorHelper } from './helpers/operator.helper';
 
 export function Dao(Class, name?: string) {
-
-
   return <T extends new (...arg: any[]) => {}>(constructor: T) => {
     return class extends constructor implements IDao {
 
 
       tableName: string;
       database: any;
-      query: any = {selector: {}};
+      query: any = { selector: {} };
       sync: any;
       replication: any;
       whereRes: any;
@@ -146,12 +144,12 @@ export function Dao(Class, name?: string) {
         try {
           if (data instanceof Array) {
             data = data.map(item => {
-              Object.assign(item, {table: this.tableName});
+              Object.assign(item, { table: this.tableName });
               return item;
             });
             promise = await this.database.bulkDocs(data);
           } else {
-            Object.assign(data, {table: this.tableName});
+            Object.assign(data, { table: this.tableName });
             promise = await this.database.put(data);
           }
           return (promise);
