@@ -338,7 +338,9 @@ export function Dao(Class, name?: string) {
       }
 
       orWhere(field: any, value, operator?): any {
-        this.query.selector = OperatorHelper.getEqualOperator([this.query.selector, this.buildWhereClause(field, value, operator)]);
+        this.query.selector = {
+          $or: [this.query.selector, this.buildWhereClause(field, value, operator)]
+        };
         return this;
       }
 

@@ -8,7 +8,6 @@ export function Entity(name?: string) {
   return <T extends new(...args: any[]) => {}>(constructor: T) => {
     let db: any;
     const chosenName = name ? name : constructor.name;
-    console.log('het ', constructor.name);
     if ((Object.getPrototypeOf(constructor) + '').includes('BaseEntity')) {
       //DbManager.getInstance().getBaseDb();
     } else {
