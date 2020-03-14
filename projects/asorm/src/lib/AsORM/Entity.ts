@@ -6,12 +6,19 @@ PouchDB.plugin(PouchdbFind);
 
 export function Entity(name?: string) {
   return <T extends new(...args: any[]) => {}>(constructor: T) => {
+    let db: any;
     const chosenName = name ? name : constructor.name;
-    const db = new PouchDB(chosenName);
-    DbManager.getInstance().addDB({
-      name: chosenName,
-      db
-    });
+    if ((Object.getPrototypeOf(constructor) + '').includes('BaseEntity')) {
+      //DbManager.getInstance().getBaseDb();
+    } else {
+      if (DbManager.getInstance().getDBByName(chosenName) == null) {
+        db = new PouchDB(chosenName);
+        DbManager.getInstance().addDB({
+          name: chosenName,
+          db
+        });
+      }
+    }
     return constructor;
   };
 }

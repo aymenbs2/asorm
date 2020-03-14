@@ -16,9 +16,16 @@ export abstract class IDao {
 
   abstract apply(...args): any;
 
+  abstract first(...args): any;
+
   abstract sync(...args): any;
 
   abstract deleteWhere(...args): any;
 
   abstract updateWhere(...args): any;
+
+  abstract set(...args): any;
+
+  abstract orWhere(...args): any;
+  abstract getAttachementManager(...args): any;
 }
