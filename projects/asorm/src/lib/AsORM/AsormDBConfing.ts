@@ -2,7 +2,6 @@ import PouchDB from 'pouchdb';
 import { DbManager } from './db.manager';
 import { ConstantsHelper } from './helpers/constants.helper';
 import { AsormConfigModel } from './base/asorm.config.model';
-import { ɵDomAdapter } from '@angular/platform-browser';
 import { MasterDoa } from './MasterDoa';
 
 

@@ -28,6 +28,10 @@ export class AppComponent {
     cn.synchronize().on('change', (data) => {
       console.log(data);
       console.log(data.direction);
+      if (data.direction == 'pull') {
+        console.log('pull')
+        cn.getMasterDao.put(data.change.docs)
+      }
     });
     this.createDoa();
     document.addEventListener('click', () => {
@@ -50,8 +54,8 @@ export class AppComponent {
     user._id = (new Date().getTime()) + '';
     user.note = 'orWhere1';
     user.shapes = ['55555', '1412', 'hdhdhdh'];
-    // this.exampleLibDoa.put(user);
-    const result = await this.exampleLibDoa.where('name', 'orWhere1').where('note', 'orWhere1').orWhere('name', 'orWhere2').apply();
+    this.exampleLibDoa.put(user);
+    const result = await this.exampleLibDoa.get();
     console.log(result);
   }
 
