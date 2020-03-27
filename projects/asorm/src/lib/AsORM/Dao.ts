@@ -1,9 +1,12 @@
-import { DbManager } from './db.manager';
-import { IDao } from './base/i.dao';
+import {DbManager} from './db.manager';
+import {IDao} from './base/i.dao';
 import PouchDB from 'pouchdb';
-import { ICallback } from './base/i.callback';
-import { AttachementManager } from './attachment/attachement.manager';
-import { OperatorHelper } from './helpers/operator.helper';
+import {ICallback} from './base/i.callback';
+import {AttachementManager} from './attachment/attachement.manager';
+import {OperatorHelper} from './helpers/operator.helper';
+import PouchdbFind from 'pouchdb-find';
+
+PouchDB.plugin(PouchdbFind);
 
 export function Dao(Class, name?: string) {
   return <T extends new (...arg: any[]) => {}>(constructor: T) => {
@@ -12,7 +15,7 @@ export function Dao(Class, name?: string) {
 
       tableName: string;
       database: any;
-      query: any = { selector: {} };
+      query: any = {selector: {}};
       sync: any;
       replication: any;
       whereRes: any;
@@ -21,8 +24,9 @@ export function Dao(Class, name?: string) {
 
       constructor(...args) {
         super(arguments);
+        PouchDB.plugin(PouchdbFind);
         this.tableName = name ? name : (new Class()).constructor.name;
-        this.isFromBase = (Object.getPrototypeOf((new Class()).constructor) + '').includes('BaseEntity');
+        this.isFromBase = this.isFromBase = (Object.getPrototypeOf((new Class()).constructor) + '').includes('BaseEntity');
         this.database = this.isFromBase ? DbManager.getInstance().getBaseDb().db : DbManager.getInstance().getDBByName(this.tableName).db;
 
       }
@@ -91,27 +95,27 @@ export function Dao(Class, name?: string) {
         });
       }
 
-      syncWith(url) {
-        this.sync = this.database.sync(new PouchDB(url), {
+      syncWith(url, options?: any) {
+        this.sync = this.database.sync(new PouchDB(url), (!options) ? {
           live: true,
           retry: true
-        });
+        } : options);
         return this.sync;
       }
 
-      replicateTo(url) {
-        this.replication = this.database.replicate.to(new PouchDB(url), {
+      replicateTo(url, options?: any) {
+        this.replication = this.database.replicate.to(new PouchDB(url), (!options) ? {
           live: true,
           retry: true
-        });
+        } : options);
         return this.replication;
       }
 
-      replicateFrom(url) {
-        this.replication = this.database.replicate.from(new PouchDB(url), {
+      replicateFrom(url, options?) {
+        this.replication = this.database.replicate.from(new PouchDB(url), (!options) ? {
           live: true,
           retry: true
-        });
+        } : options);
         return this.replication;
       }
 
@@ -144,12 +148,12 @@ export function Dao(Class, name?: string) {
         try {
           if (data instanceof Array) {
             data = data.map(item => {
-              Object.assign(item, { table: this.tableName });
+              Object.assign(item, {table: this.tableName});
               return item;
             });
             promise = await this.database.bulkDocs(data);
           } else {
-            Object.assign(data, { table: this.tableName });
+            Object.assign(data, {table: this.tableName});
             promise = await this.database.put(data);
           }
           return (promise);
@@ -248,11 +252,24 @@ export function Dao(Class, name?: string) {
 
       async first(callback?: ICallback): Promise<any> {
         let result;
+        if (!this.isFromBase) {
+          if (!callback) {
+            result = await this.database.find(this.query);
+            return result.docs[0];
+          }
+          await this.applyWithCallBack(callback, true);
+          return;
+        }
+        this.where('table', this.tableName);
         if (!callback) {
           result = await this.database.find(this.query);
           return result.docs[0];
+          if (result.docs.length > 0) {
+            return result.docs[0];
+          }
+          return {};
         }
-        await this.applyWithCallBack(callback, true);
+        this.applyWithCallBack(callback, true);
       }
 
       async apply(callback?: ICallback): Promise<any> {
@@ -268,7 +285,29 @@ export function Dao(Class, name?: string) {
       }
 
       async applyWithCallBack(callback: ICallback, isFirst: boolean) {
+        if (!this.isFromBase) {
+          if (callback.onPreExecute) {
+            callback.onPreExecute();
+          }
+          const result = await this.get();
+          if (result.docs.length > 0) {
+            if (isFirst) {
+              callback.onSuccess(result.docs[0]);
+            } else {
+              callback.onSuccess(result.docs);
+            }
 
+          } else {
+            if (callback.onEmpty) {
+              callback.onEmpty();
+            }
+          }
+
+          if (callback.onPostExecute) {
+            callback.onPostExecute();
+          }
+          return result;
+        }
         if (callback.onPreExecute) {
           callback.onPreExecute();
         }
@@ -361,3 +400,4 @@ export function Dao(Class, name?: string) {
 
 
 }
+

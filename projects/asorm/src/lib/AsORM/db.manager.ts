@@ -12,6 +12,7 @@ export class DbManager {
   private baseDb;
 
   constructor() {
+    PouchDB.plugin(PouchdbFind);
     this.dbs = [];
   }
 
@@ -42,7 +43,12 @@ export class DbManager {
   }
 
   getMasterDatabaseName() {
-    return JSON.parse(window.localStorage.getItem(ConstantsHelper.CONFIG_KEY)).dbName;
+    let masterConf = {
+      dbName: '',
+      password: ''
+    }
+    masterConf = JSON.parse(localStorage.getItem(ConstantsHelper.CONFIG_KEY));
+    return masterConf.dbName;
   }
 
   getBaseDb() {
@@ -51,6 +57,7 @@ export class DbManager {
     }
     return this.baseDb;
   }
+
   setBaseDB(value) {
     this.baseDb = value;
   }
@@ -58,7 +65,8 @@ export class DbManager {
   private createBaseDB() {
 
     let db: any;
-    if (this.getMasterDatabaseName() !== undefined) {
+    if (this.getMasterDatabaseName() !== undefined && this.getMasterDatabaseName() !== '') {
+      PouchDB.plugin(PouchdbFind);
       db = new PouchDB(this.getMasterDatabaseName());
       return {
         name: this.getMasterDatabaseName(),

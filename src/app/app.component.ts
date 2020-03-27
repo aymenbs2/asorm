@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
-import { ExampleLibDao } from '../app/ExampleLibDao';
-import { User } from './User';
-import { AttachmentTypes } from '../../projects/asorm/src/lib/asorm/attachment/types';
-import { saveAs } from 'file-saver';
-import { config } from 'rxjs';
-import { AsormConfig } from 'asorm';
+import {Component, OnInit} from '@angular/core';
+import {ExampleLibDao} from '../app/ExampleLibDao';
+import {User} from './User';
+import {AttachmentTypes} from '../../projects/asorm/src/lib/asorm/attachment/types';
+import {saveAs} from 'file-saver';
+import {config} from 'rxjs';
+import {AsormConfig} from 'asorm';
+import {PatientDao} from "./PatientDao";
+import {PatientEntity} from "./Patient";
 
 const global = window;
 
@@ -15,62 +17,79 @@ const global = window;
     ' AsORM</h1>',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   static instance: AppComponent;
   title = 'AsORM';
   exampleLibDoa;
   imgSc: any;
   isLoaded;
+  cn: any;
+  patientDao;
 
   constructor() {
-
-    const cn = new AsormConfig({ url: 'http://localhost:5984', dbName: 'covttest', username: 'admin', password: 'password' });
-    cn.synchronize().on('change', (data) => {
-      console.log(data);
-      console.log(data.direction);
-      if (data.direction == 'pull') {
-        console.log('pull')
-        cn.getMasterDao.put(data.change.docs)
-      }
+    this.cn = new AsormConfig({
+      url: 'http://localhost;5984/',
+      dbName: 'firsttest',
+      username: 'admin',
+      password: 'password'
     });
+    AppComponent.instance = this;
+    this.isLoaded = false;
+
+  }
+
+  ngOnInit(): void {
+    try {
+      this.cn.synchronize().on('change', (data) => {
+
+      }).on('paused', function (info) {
+        console.log('en paused', info)
+        // replication was paused, usually because of a lost connection
+      }).on('active', function (info) {
+        // replication was resumed
+      }).on('error', function (err) {
+        console.log('en error')
+
+        // totally unhandled error (shouldn't happen)
+      });
+    } catch (e) {
+      console.log('cathc', e)
+    }
     this.createDoa();
     document.addEventListener('click', () => {
       console.log('clikc');
       this.addOnEnter();
-    });
-    AppComponent.instance = this;
-    this.isLoaded = false;
+    })
   }
 
 
   createDoa() {
     this.exampleLibDoa = new ExampleLibDao();
+    this.patientDao = new PatientDao();
   }
 
   async addOnEnter() {
-    let reader: FileReader;
     const user = new User();
-    user.name = 'orWhere1';
+    const patient = new PatientEntity();
+    user.name = 'first';
     user._id = (new Date().getTime()) + '';
-    user.note = 'orWhere1';
+    user.note = 'aymen';
     user.shapes = ['55555', '1412', 'hdhdhdh'];
+    user.name = 'first';
+    patient._id = (new Date().getTime()) + '';
+    patient.name = 'first';
+    // this.patientDao.put(patient)
     this.exampleLibDoa.put(user);
-    const result = await this.exampleLibDoa.get();
-    console.log(result);
+    this.exampleLibDoa.where('name', 'first').where("note", "first").first({
+      onSuccess: (data) => {
+        console.log(data)
+      },
+      onError: (e) => {
+        console.log(e)
+      }
+    })
+    ;
   }
 
-  dataURLtoFile(dataurl, filename) {
-
-    let arr = dataurl.split(',');
-    let mime = arr[0].match(/:(.*?);/)[1];
-    let bstr = atob(arr[1]);
-    let n = bstr.length;
-    let u8arr = new Uint8Array(n);
-
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, { type: mime });
-  }
 
 }

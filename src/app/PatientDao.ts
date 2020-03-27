@@ -1,5 +1,5 @@
 import {PatientEntity} from './Patient';
-import {Dao} from '../../projects/asorm/src/lib/asorm/dao';
+import {Dao} from '../../projects/asorm/src/lib/AsORM/dao';
 
 @Dao(PatientEntity, 'patients')
 export class PatientDao {
