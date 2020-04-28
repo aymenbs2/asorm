@@ -169,13 +169,17 @@ export function Dao(Class, name?: string) {
         this.deleteWithCallBack(doc, callback);
       }
 
-      async updateWhere(field, value, operator?, callback?) {
+      async update(value, callback?) {
+        let target = await this.apply();
+        console.log('raada', target)
+        target.forEach(item => {
+          Object.assign(item, value);
+        });
         if (!callback) {
-          this.whereRes = await this.where(field, value, operator).apply();
-          //  return await this.updateAndGetResult(toUpdate, newData, field, value);
+          return await this.put(target);
+        } else {
+          this.put(target, callback);
         }
-        //  this.updateWithCallBack(field, value, operator, callback);
-        return this;
       }
 
       async set(newObjects) {
@@ -188,29 +192,6 @@ export function Dao(Class, name?: string) {
         return result;
       }
 
-      async updateWithCallBack(field: string | number, value: any, operator?: any, callback?: ICallback) {
-        let item;
-        let result: any[];
-        let toUpdate: any;
-        if (callback.onPreExecute) {
-          callback.onPreExecute();
-        }
-        toUpdate = await this.where(field, value, operator).apply();
-        result = [];
-        try {
-          for (item of toUpdate) {
-            item[field] = value;
-            result.push(await this.database.put(item));
-          }
-          callback.onSuccess(result);
-        } catch (e) {
-          callback.onError(e);
-        }
-        if (callback.onPostExecute) {
-          callback.onPostExecute();
-        }
-        return result;
-      }
 
       async deleteWhereWithCallBack(field: string | number, value: any, operator?: any, callback?: ICallback) {
         let result: any[];
@@ -235,15 +216,6 @@ export function Dao(Class, name?: string) {
         return result;
       }
 
-      async updateAndGetResult(toUpdate, newData, field, value) {
-        let item;
-        const result = [];
-        for (item of toUpdate) {
-          item[field] = newData;
-          result.push(await this.database.put(item));
-        }
-        return result;
-      }
 
       where(field: any, value: any, operator?: any) {
         Object.assign(this.query.selector, this.buildWhereClause(field, value, operator));
@@ -357,9 +329,9 @@ export function Dao(Class, name?: string) {
         const toDeleteList = await this.where(field, value, operator).apply();
         const result = [];
         for (const item of toDeleteList) {
-          result.push(await this.delete(item));
+          result.push(this.delete(item));
         }
-        return result;
+        return await Promise.all(result);
       }
 
       buildOrderByClause(field, order?) {

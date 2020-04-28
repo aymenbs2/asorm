@@ -21,8 +21,8 @@ export abstract class IDao {
   abstract sync(...args): any;
 
   abstract deleteWhere(...args): any;
+  abstract update(...args): any;
 
-  abstract updateWhere(...args): any;
 
   abstract set(...args): any;
 

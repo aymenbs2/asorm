@@ -253,7 +253,15 @@ export class MasterDoa implements IDao {
     }
     return result;
   }
-
+  async update(value, callback?) {
+    let target = await this.apply();
+    if (!callback) {
+      target = target.map(item => {
+        return Object.assign(item, value);
+      });
+    }
+    return await this.put(target);
+  }
   buildOrderByClause(field, order?) {
     const result = {};
     result[field] = (order) ? order : 'asc';

@@ -57,7 +57,7 @@ export class AsormConfig {
 
   getMasterDao() {
     if (this.masterDao === undefined) {
-      this.masterDao = new MasterDoa(DbManager.getInstance().getBaseDb().database);
+      this.masterDao = new MasterDoa(DbManager.getInstance().getBaseDb().db);
     }
     return this.masterDao;
   }

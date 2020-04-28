@@ -1,11 +1,11 @@
 {
   "name": "asorm",
-  "version": "1.4.24",
+  "version": "1.4.27",
   "peerDependencies": {
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14",
     "pouchdb": "^7.1.1",
-  "pouchdb-find": "^7.1.1"
+     "pouchdb-find": "^7.1.1"
 },
   "keywords": [
     "pouchdb",

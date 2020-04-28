@@ -78,17 +78,18 @@ export class AppComponent implements OnInit {
     user.name = 'first';
     patient._id = (new Date().getTime()) + '';
     patient.name = 'first';
-    // this.patientDao.put(patient)
-    this.exampleLibDoa.put(user);
-    this.exampleLibDoa.where('name', 'first').where("note", "first").first({
-      onSuccess: (data) => {
-        console.log(data)
-      },
-      onError: (e) => {
-        console.log(e)
-      }
-    })
-    ;
+    //  this.patientDao.put(patient)
+    const res = await this.exampleLibDoa.where("note", 'aymen',"like").update({name: "fisrt_updated"});
+    console.log('update res', res);
+    // this.exampleLibDoa.get({
+    //   onSuccess: (data) => {
+    //     console.log(data);
+    //   },
+    //   onError: (e) => {
+    //     console.log(e)
+    //   }
+    // })
+    // ;
   }
 
 

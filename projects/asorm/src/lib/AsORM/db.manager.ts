@@ -67,7 +67,7 @@ export class DbManager {
     let db: any;
     if (this.getMasterDatabaseName() !== undefined && this.getMasterDatabaseName() !== '') {
       PouchDB.plugin(PouchdbFind);
-      db = new PouchDB(this.getMasterDatabaseName());
+      db = new PouchDB(this.getMasterDatabaseName(), {auto_compaction: true});
       return {
         name: this.getMasterDatabaseName(),
         db
